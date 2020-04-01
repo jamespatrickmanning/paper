@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Mar 25 01:04:26 2020
+This code is for ploting bar chart of fishing VS ship permonth from 2015 to 2018
 
-@author: Administrator
+@author: Mingchao
 """
 
 import pandas as pd
@@ -101,7 +102,7 @@ plt.xlim([0,13])
 #plt.ylim([0,600])
 plt.ylim([0,400])
 #plt.xticks(range(13),fontsize=10)
-plt.xticks(np.arange(1,13))
+plt.xticks(np.arange(1,13))#12 monthes
 plt.yticks(fontsize=10)
 #plt.ylabel('Quantity',fontsize=16)
 plt.ylabel('number of bottom temperature observations')
