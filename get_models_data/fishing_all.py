@@ -36,13 +36,13 @@ for i in range(len(vessel_lists)):
     vessel_df = pd.read_csv(vessel_lists[i], index_col=0)
     vessel_dfs = pd.concat([vessel_dfs, vessel_df], axis=0, ignore_index=True)
 vessel_dfs_D = vessel_dfs.dropna(subset=['Doppio_T'])
-vessel_dfs_D['difference'] = vessel_dfs_D['Doppio_T']-vessel_dfs_D['observation_T']
+vessel_dfs_D['difference'] = vessel_dfs_D['observation_T'] - vessel_dfs_D['Doppio_T']
 vessel_dfs_G = vessel_dfs.dropna(subset=['GoMOLFs_T'])
-vessel_dfs_G['difference'] = vessel_dfs_G['GoMOLFs_T']-vessel_dfs_G['observation_T']
+vessel_dfs_G['difference'] = vessel_dfs_G['observation_T'] - vessel_dfs_G['GoMOLFs_T']
 vessel_dfs_F = vessel_dfs.dropna(subset=['FVCOM_T'])
-vessel_dfs_F['difference'] = vessel_dfs_F['FVCOM_T']-vessel_dfs_F['observation_T']
+vessel_dfs_F['difference'] = vessel_dfs_F['observation_T'] - vessel_dfs_F['FVCOM_T']
 vessel_dfs_C = vessel_dfs.dropna(subset=['Clim_T'])
-vessel_dfs_C['difference'] = vessel_dfs_C['Clim_T']-vessel_dfs_C['observation_T']
+vessel_dfs_C['difference'] = vessel_dfs_C['observation_T'] - vessel_dfs_C['Clim_T']
 vessel_dfs_D.index = range(len(vessel_dfs_D))
 vessel_dfs_G.index = range(len(vessel_dfs_G))
 vessel_dfs_F.index = range(len(vessel_dfs_F))
