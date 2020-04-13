@@ -2,7 +2,7 @@
 """
 Created on Wed Apr  8 01:18:54 2020
 
-Draw map of models'temperature minus observation'stemperature.
+Draw map of observation'stemperature minus models'temperature.
     (This code still needs a lot of simplifying.Because it didn't loop models,so you need to change the models'file,
     such as DF_C,DF_D,DF_F,DF_G ; save_path and subtitle.
 
@@ -51,13 +51,13 @@ DF_C = pd.read_csv(path+data_list[0], index_col=0)
 DF_D = pd.read_csv(path+data_list[1], index_col=0)
 DF_F = pd.read_csv(path+data_list[2], index_col=0)
 DF_G = pd.read_csv(path+data_list[3], index_col=0)
-for i in range(len(DF_G['difference'])):
-    if abs(DF_G['difference'][i]) < 6:
+for i in range(len(DF_C['difference'])):
+    if abs(DF_C['difference'][i]) < 6:
         continue
     else:
-        DF_G = DF_G.drop(i)
-DF_G.index = range(len(DF_G))
-DF_G['time'] = pd.to_datetime(DF_G['time'])
+        DF_C = DF_C.drop(i)
+DF_C.index = range(len(DF_C))
+DF_C['time'] = pd.to_datetime(DF_C['time'])
 seasons = ['SPRING', 'SUMMER', 'FALL', 'WINTER']
 spring_list = []
 summer_list = []
@@ -68,19 +68,19 @@ spring_df = pd.DataFrame(data=None,\
 summer_df = spring_df
 fall_df = spring_df
 winter_df = spring_df
-for i in range(len(DF_G['time'])):
-    if 3<=DF_G['time'][i].month<=5:
-        spring_list.append(DF_G['difference'][i])
-        spring_df = spring_df.append(DF_G.iloc[i], ignore_index=True)
-    elif 6<=DF_G['time'][i].month<=8:
-        summer_list.append(DF_G['difference'][i])
-        summer_df = summer_df.append(DF_G.iloc[i], ignore_index=True)
-    elif 9<=DF_G['time'][i].month<=11:
-        fall_list.append(DF_G['difference'][i])
-        fall_df = fall_df.append(DF_G.iloc[i], ignore_index=True)
-    elif 11<DF_G['time'][i].month<=12 or 1<=DF_G['time'][i].month<=2:
-        winter_list.append(DF_G['difference'][i])
-        winter_df = winter_df.append(DF_G.iloc[i], ignore_index=True)
+for i in range(len(DF_C['time'])):
+    if 3<=DF_C['time'][i].month<=5:
+        spring_list.append(DF_C['difference'][i])
+        spring_df = spring_df.append(DF_C.iloc[i], ignore_index=True)
+    elif 6<=DF_C['time'][i].month<=8:
+        summer_list.append(DF_C['difference'][i])
+        summer_df = summer_df.append(DF_C.iloc[i], ignore_index=True)
+    elif 9<=DF_C['time'][i].month<=11:
+        fall_list.append(DF_C['difference'][i])
+        fall_df = fall_df.append(DF_C.iloc[i], ignore_index=True)
+    elif 11<DF_C['time'][i].month<=12 or 1<=DF_C['time'][i].month<=2:
+        winter_list.append(DF_C['difference'][i])
+        winter_df = winter_df.append(DF_C.iloc[i], ignore_index=True)
 spring_df.index = range(len(spring_df))
 summer_df.index = range(len(summer_df))
 fall_df.index = range(len(fall_df))
@@ -123,6 +123,6 @@ c3 = fig.colorbar(a, ax=[ax1, ax2, ax3, ax4])
 c3.set_ticks(np.arange(-6,6))
 c3.set_ticklabels(np.arange(-6,6))
 fig.text(0.5, 0.93, '2018.07 to 2019.12', ha='center', va='center', fontsize=2.0*size)
-plt.suptitle('GOMOFS minus FISHING temperature difference', va='center_baseline', fontsize=2.5*size)
+plt.suptitle('FISHING  minus CLIM temperature difference', va='center_baseline', fontsize=2.5*size)
 plt.savefig(save_path)
 plt.show()
