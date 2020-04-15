@@ -7,6 +7,9 @@ Draw map of observation'stemperature minus models'temperature.
     such as DF_C,DF_D,DF_F,DF_G ; save_path and subtitle.
 
 @author: Mingchao
+Modifications by JiM in Mid-April 2020 - minor suggestions and documentation
+- assumes input and output files are in the same directory as the code
+- ignores values greater than a user-specified "maxdiff_ignore"
 """
 
 import pandas as pd
@@ -16,11 +19,11 @@ import numpy as np
 import datetime
 
 #Hardcodes
-path = 'E:\\Mingchao\\paper\\'
+maxdiff_ignore=6 # ignore when difference is greater than this number
 data_list = ['vessel_dfs_C.csv', 'vessel_dfs_D.csv',\
              'vessel_dfs_F.csv', 'vessel_dfs_G.csv'
              ]
-save_path = 'E:\\Mingchao\\paper\\gomofs_obs_map.png'
+save_path = 'gomofs_obs_map.png'
 start_time_str = '2018-07-01 00:00:00'
 end_time_str = '2019-12-18 00:00:00'
 start_time = datetime.datetime.strptime(start_time_str,'%Y-%m-%d %H:%M:%S')
@@ -51,6 +54,7 @@ DF_C = pd.read_csv(path+data_list[0], index_col=0)
 DF_D = pd.read_csv(path+data_list[1], index_col=0)
 DF_F = pd.read_csv(path+data_list[2], index_col=0)
 DF_G = pd.read_csv(path+data_list[3], index_col=0)
+# here's the section that ignores wild outliers
 for i in range(len(DF_C['difference'])):
     if abs(DF_C['difference'][i]) < 6:
         continue
