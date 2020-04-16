@@ -2,9 +2,6 @@
 """
 Created on Mon Apr 13 09:31:54 2020
 
-For ploting distribution of fishing data,but this code is still not finished. 
-If you need to use binning python,you can read test_yifan.py that saved in same folder with this code. 
-
 @author: Mingchao
 """
 
@@ -17,11 +14,11 @@ from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 
 #Hardcodes
-path = 'E:\\Mingchao\\paper\\vessel_dfs_C.csv'
-#url = 'http://tds.marine.rutgers.edu/thredds/dodsC/roms/espresso/2009_da/his'
+path = 'E:\\Mingchao\\paper\\vessel_dfs_D.csv'
+url = 'http://tds.marine.rutgers.edu/thredds/dodsC/roms/espresso/2009_da/his'
 save_path = 'E:\\Mingchao\\paper\\distribution_of_fishing.png'
 
-def draw_basemap(fig, ax, lonsize, latsize, interval_lon=4, interval_lat=4):
+def draw_basemap(fig, ax, lonsize, latsize, interval_lon=3, interval_lat=3):
     ax = fig.sca(ax)
     dmap = Basemap(projection = 'cyl',
                    llcrnrlat = min(latsize)-0.01,
@@ -32,9 +29,11 @@ def draw_basemap(fig, ax, lonsize, latsize, interval_lon=4, interval_lat=4):
     dmap.drawparallels(np.arange(int(min(latsize)),
                                  int(max(latsize))+1,interval_lat),
                        labels=[1,0,0,0] ,linewidth=0,)
+                       #labels=[1,0,0,0])
     dmap.drawmeridians(np.arange(int(min(lonsize))-1,
                                  int(max(lonsize))+1,interval_lon),
                        labels=[0,0,0,1] ,linewidth=0,)
+                       #labels=[0,0,0,1])
     dmap.drawcoastlines(color='grey')
     dmap.fillcontinents(color='grey')
     dmap.drawmapboundary()
@@ -130,8 +129,10 @@ for i in nearestIndex:
     n = whichArea(i[1], r2)
     errorNum[m][n] += 1
 '''
-x_cut = pd.cut(data.lat, np.linspace(32, 47, 8), right=False)
-y_cut = pd.cut(data.lon, np.linspace(-80, -59, 12), right=False)
+#x_cut = pd.cut(data.lat, np.linspace(32, 47, 8), right=False)
+#y_cut = pd.cut(data.lon, np.linspace(-80, -59, 12), right=False)
+x_cut = pd.cut(data.lat, np.linspace(32.24, 46.612, 8), right=False)
+y_cut = pd.cut(data.lon, np.linspace(-80.52, -59.7, 12), right=False)
 # group and count
 count_df = data.groupby([x_cut, y_cut]).count()
 #drop null value only save the counting 
@@ -140,20 +141,56 @@ count_df = count_df['difference'].dropna()
 #lat_i = [44.5, 44.5, 44.5, 42, 42, 42, 42, 39.5, 39.5, 34.5]
 #lon_j = [-73, -70.667, -68.333, -75.333, -73, -70.667, -68.333, -75.333, -73, -75.333]
 #dataNum_k = [64, 1069, 46, 67, 1345, 533, 288, 46, 120, 14]
+'''
+lat_list = [36.286, 36.286, 38.429, 38.429, 38.429, 38.429,\
+            40.571, 40.571, 40.571, 40.571, 42.714, 42.714,\
+            42.714]
+lon_list = [-76.182, -74.273, -74.273, -72.364, -70.455, -68.545,\
+            -74.273, -72.364, -70.455, -68.545, -72.364, -70.455,\
+            -68.545]
+dataNum_list = [17, 28, 305, 205, 7, 33, 30,\
+                1094, 583, 476, 568, 245, 1]
 
-dataNum[2][2] = 17
-dataNum[2][3] = 28
-dataNum[3][3] = 305
-dataNum[3][4] = 205
-dataNum[3][5] = 7
-dataNum[3][6] = 33
-dataNum[4][3] = 30
-dataNum[4][4] = 1094
-dataNum[4][5] = 583
-dataNum[4][6] = 476
-dataNum[5][4] = 568
-dataNum[5][5] = 245
-dataNum[5][6] = 1
+lat_list = [36.346, 38.399, 38.399, 38.399, 38.399, 40.453,\
+            40.453, 40.453, 40.453, 40.453, 42.506, 42.506
+           ]
+lon_list = [-74.842, -74.842, -72.949, -71.056, -69.164, -74.842,\
+            -72.949, -71.056, -69.164, -67.271, -71.056, -69.164
+           ]
+dataNum_list = [51, 34, 436, 23, 9, 54, 1214,\
+                537, 550, 33, 980, 16]
+def judge_index(lat, lon):
+#get the index of x and y
+    lat_index = [32.24, 34.293, 36.346, 38.399, 40.453, 42.506, 44.559]
+    lon_index = [-80.52, -78.627, -76.735, -74.842, -72.949, -71.056,\
+                 -69.164, -67.271, -65.378, -63.485, -61.593]
+    for i in lat_index:
+        if lat == i:
+            m = lat_index.index(i)
+    for j in lon_index:
+        if lon == j:
+            n = lon_index.index(j)
+    return m, n 
+
+for i in range(len(lat_list)):
+    m, n = judge_index(lat_list[i], lon_list[i])
+    dataNum[m][n] = dataNum_list[i]
+for i in range(len(lat_list)):
+     plt.text(lon_list[i]-1, lat_list[i]-1, dataNum_list[i], color='r',multialignment='center', ha='center')
+'''
+dataNum[2][5] = 9
+dataNum[3][2] = 51
+dataNum[3][4] = 23
+dataNum[3][7] = 33
+dataNum[4][3] = 436
+dataNum[4][6] = 550
+dataNum[5][3] = 34
+dataNum[5][4] = 1214
+dataNum[5][5] = 537
+dataNum[5][7] = 16
+dataNum[6][4] = 54
+dataNum[6][6] = 980
+'''
 #x, y = m(lon_j, lat_i)
 #for i in range(len(lon_j)):
 #    plt.text(lon_j[i], lat_i[i], dataNum_k[i], color='r')
@@ -162,6 +199,7 @@ dataNum[5][6] = 1
 #dataNum.reverse()
 #m1, m2 = 37.20694434507049, 46.61132781935112
 #n1, n2 = -80.51869016711879, -75.19030604271552
+'''
 m1, m2 = 32.24, 41.08
 n1, n2 = -75.19, -59.69
 for s in range(7):
