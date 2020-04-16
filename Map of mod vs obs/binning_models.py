@@ -74,7 +74,7 @@ dataNum = []
 #for i in range(9):
 for i in range(7):
     j = [0,0,0,0,0,0,0,0,0,0,0]
-    #j = [0,0,0,0,0,0,0,0,0]
+    #j = [0,0,0,0,0,0,0,0,0,0]
     dataNum.append(j)
 
 fig = plt.figure(figsize=(9,9))
@@ -162,17 +162,17 @@ dataNum[5][6] = 1
 m1, m2 = 32.24, 41.08
 n1, n2 = -75.19, -59.69
 for s in range(7):
-    #a = np.arange(n1, n2, 1.597)
-    a = np.arange(n1, n2,  1.409)
-    #b = np.arange(m1, m2, 1.044931497142292)
-    #b = np.arange(m1, m2, 0.8036)
-    b = np.arange(m1, m2, 0.9)
+    #a = np.arange(n1, n2,  1.409)
+    #b = np.arange(m1, m2, 0.9)
+    a = np.arange(n1, n2,  1.435)
+    b = np.arange(m1, m2, 0.867)
     for i, j, k in zip(a, b, dataNum[s]):
         #print(i, j, k)
         if k>0:
             plt.text(i, j, k, color='r',multialignment='center', ha='center', rotation=30)
-    m1 = m1 + 0.73
-    m2 = m2 + 0.73
+    #m1 = m1 + 0.73
+    m1 = m1 + 0.76
+    m2 = m2 + 0.76
     n1 = n1 - 0.7
     n2 = n2 - 0.7
 plt.title('Distribution of Fishing DATA',  fontsize=2.5*size, va='center_baseline')
