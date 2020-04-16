@@ -2,6 +2,9 @@
 """
 Created on Mon Apr 13 09:31:54 2020
 
+For ploting distribution of fishing data,but this code is still not finished. 
+If you need to use binning python,you can read test_yifan.py that saved in same folder with this code. 
+
 @author: Mingchao
 """
 
@@ -15,7 +18,7 @@ import matplotlib.pyplot as plt
 
 #Hardcodes
 path = 'E:\\Mingchao\\paper\\vessel_dfs_C.csv'
-url = 'http://tds.marine.rutgers.edu/thredds/dodsC/roms/espresso/2009_da/his'
+#url = 'http://tds.marine.rutgers.edu/thredds/dodsC/roms/espresso/2009_da/his'
 save_path = 'E:\\Mingchao\\paper\\distribution_of_fishing.png'
 
 def draw_basemap(fig, ax, lonsize, latsize, interval_lon=4, interval_lat=4):
