@@ -2,12 +2,14 @@
 """
 Created on Mon Apr 20 14:32:45 2020
 
-@author: Administrator
+Plot distribution of emolt_QCed.csv from 2015-06-13 to now.
+If you need,you can add start time and end time on the area of filter data,get the time range you want.
+
+@author: Mingchao
 """
 
 import netCDF4
 import datetime
-import os
 import pandas as pd
 import numpy as np
 from mpl_toolkits.basemap import Basemap
@@ -17,7 +19,7 @@ from matplotlib import path
 #Hardcodes
 emolt_path = 'https://www.nefsc.noaa.gov/drifter/emolt_QCed.csv'
 url = 'http://tds.marine.rutgers.edu/thredds/dodsC/roms/espresso/2009_da/his'
-save_path = 'E:\\Mingchao\\paper\\distribution_of_fishing.png'
+save_path = 'E:\\Mingchao\\paper\\emolt_binning.png'
 
 def draw_basemap(fig, ax, lonsize, latsize, interval_lon=3, interval_lat=3):
     ax = fig.sca(ax)
@@ -39,26 +41,14 @@ def draw_basemap(fig, ax, lonsize, latsize, interval_lon=3, interval_lat=3):
     dmap.fillcontinents(color='grey')
     dmap.drawmapboundary()
 
-def whichArea(arg, lst):
-    #Calculate certain point belongs to which area.
-    i = len(lst)//2
-    if i != 0: 
-        if arg >= lst[i]:
-            r = i + whichArea(arg, lst[i:])
-        elif arg < lst[i]:
-            r = whichArea(arg, lst[:i])
-    else: 
-        r = i
-    return r    
-
 def get_doppio_url(date):
     url='http://tds.marine.rutgers.edu/thredds/dodsC/roms/doppio/2017_da/his/runs/History_RUN_2018-11-12T00:00:00Z'
     return url.replace('2018-11-12',date)
 
 #main
-data = pd.read_csv(emolt_path, index_col=0)
+data = pd.read_csv(emolt_path, index_col=0)#get data from emolt_QCed.csv
 for i in range(len(data)):
-    if not 30<data['lat'][i]<50  or data['flag'][i]==1:
+    if not 30<data['lat'][i]<50  or data['flag'][i]==1:#filter the data are not well
         data = data.drop(i)
 data.index = range(len(data))
 #data = data[0:500]
@@ -70,57 +60,39 @@ lons = nc_doppio.variables['lon_rho'][:]
 lats = nc_doppio.variables['lat_rho'][:]
 lonsize = [np.amin(lons), np.amax(lons)]
 latsize = [np.amin(lats), np.amax(lats)]
-dataNum = []
-#for i in range(9):
+dataNum = []#create a list for storing distrubution of number
 for i in range(7):
     j = [0,0,0,0,0,0,0,0,0,0,0]
-    #j = [0,0,0,0,0,0,0,0,0,0]
     dataNum.append(j)
 
 fig = plt.figure(figsize=(9,9))
 size = min(fig.get_size_inches())
 ax = fig.add_subplot(111)
-
 draw_basemap(fig, ax, lonsize, latsize)
-#plt.plot([lonA, lonB, lonC, lonD, lonA], [latA, latB, latC, latD, latA], 'b-')
-
+#plot boundary of Doppio
 x1_d = [lons[0][0], lons[0][-1], lons[-1][-1],\
         lons[-1][0], lons[0][0]]
 y1_d = [lats[0][0], lats[0][-1], lats[-1][-1],\
         lats[-1][0], lats[0][0]]
 plt.plot(x1_d, y1_d, color='b')
 
-#for i in range(0, 242, 28):
+#plot grid in figure
 for i in range(0, 242, 22):
     plt.plot([lons[0][i], lons[-1][i]], [lats[0][i], lats[-1][i]], 'b--')
-#for i in range(0, 105, 19):
 for i in range(0, 105, 15):
     plt.plot([lons[i][0], lons[i][-1]], [lats[i][0], lats[i][-1]], 'b--')
 
-list_00 = [(32.23944076+i*0.81119, -75.19030604+i*1.40909), (33.04333746+i*0.81119, -73.78121304+i*1.40909),\
-           (33.7602733+i*0.81119, -74.53623985+i*1.40909), (32.94908413+i*0.81119, -75.95150377+i*1.40909)]
-list_10 = [(32.94908413+i*0.81119, -75.95150377+i*1.40909), (33.7602733+i*0.81119, -74.53623985+i*1.40909),\
-           (34.47720913+i*0.81119, -75.29126667+i*1.40909), (33.6587275+i*0.81119, -76.71270151+i*1.40909)]
-list_20 = [(33.6587275+i*0.81119, -76.71270151+i*1.40909), (34.47720913+i*0.81119, -75.29126667+i*1.40909),\
-           (35.19414496+i*0.81119, -76.04629348+i*1.40909), (34.36837087+i*0.81119, -77.47389924+i*1.40909)]
-list_30 = [(34.36837087+i*0.81119, -77.47389924+i*1.40909), (35.19414496+i*0.81119, -76.04629348+i*1.40909),\
-           (35.9110808+i*0.81119, -76.8013203+i*1.40909), (35.07801424+i*0.81119, -78.23509697+i*1.40909)]
-list_40 = [(35.07801424+i*0.81119, -78.23509697+i*1.40909), (35.9110808+i*0.81119, -76.8013203+i*1.40909),\
-           (36.62801663+i*0.81119, -77.55634711+i*1.40909), (35.78765761+i*0.81119, -78.9962947+i*1.40909)]
-list_50 = [(35.78765761+i*0.81119, -78.9962947+i*1.40909), (36.62801663+i*0.81119, -77.55634711+i*1.40909),\
-           (37.34495247+i*0.81119, -78.31137393+i*1.40909), (36.49730098+i*0.81119, -79.75749244+i*1.40909)]
-list_60 = [(36.49730098+i*0.81119, -79.75749244+i*1.40909), (37.34495247+i*0.81119, -78.31137393+i*1.40909),\
-           (38.0618883+i*0.81119, -79.06640074+i*1.40909), (37.20694435+i*0.81119 ,-80.51869017+i*1.40909)]
-
+#loop data and append distribution of number into list
 for j in range(len(data)):
    for i in range(0,11):
-       from matplotlib import path
+       #list_00 is the box of left bottom,it is 0 row 0 column
        list_00 = [(32.23944076+i*0.81119, -75.19030604+i*1.40909), (33.04333746+i*0.81119, -73.78121304+i*1.40909),\
                   (33.7602733+i*0.81119, -74.53623985+i*1.40909), (32.94908413+i*0.81119, -75.95150377+i*1.40909)]
        p1 = path.Path([list_00[0], list_00[1], list_00[2], list_00[3]])
        if p1.contains_points([(data['lat'][j],data['lon'][j])])[0] != False:
            #if p1.contains_points([ii,jj])[0] == False:
            dataNum[0][i] += 1
+       #list_10 is 1 row 0 column
        list_10 = [(32.94908413+i*0.81119, -75.95150377+i*1.40909), (33.7602733+i*0.81119, -74.53623985+i*1.40909),\
                   (34.47720913+i*0.81119, -75.29126667+i*1.40909), (33.6587275+i*0.81119, -76.71270151+i*1.40909)]               
        p2 = path.Path([list_10[0], list_10[1], list_10[2], list_10[3]])
@@ -151,20 +123,17 @@ for j in range(len(data)):
        p7 = path.Path([list_60[0], list_60[1], list_60[2], list_60[3]])
        if p7.contains_points([(data['lat'][j],data['lon'][j])])[0] != False:
            dataNum[6][i] += 1
-
-m1, m2 = 32.24, 41.08
+#loop every number of distribution in list,match the box in grid
+m1, m2 = 32.24, 41.08#(m1,n1) and (m2,n2) are coordinates of grid of left bottom and right bottom
 n1, n2 = -75.19, -59.69
 for s in range(7):
-    #a = np.arange(n1, n2,  1.409)
-    #b = np.arange(m1, m2, 0.9)
-    a = np.arange(n1, n2,  1.435)
+    a = np.arange(n1, n2,  1.435)#a,b is the position for showing in figure
     b = np.arange(m1, m2, 0.867)
     for i, j, k in zip(a, b, dataNum[s]):
-        #print(i, j, k)
-        if k>0:
+        if k>0:#only display the  distribution had fishing
             plt.text(i, j, k, color='r',multialignment='center', ha='center', rotation=30)
     #m1 = m1 + 0.73
-    m1 = m1 + 0.76
+    m1 = m1 + 0.76#adjust the space for more better
     m2 = m2 + 0.76
     n1 = n1 - 0.7
     n2 = n2 - 0.7
