@@ -1,5 +1,8 @@
-This folder has routines to create two types of maps:
-1) obs minus model scatter plots "Map_obs_modelscatter.py" with multiple panels.
-2) obs minus model binned plots  "bin_fishtemps.py"
-where we might consider combining them into one file in the future.
-The input file (aas of late April 2020) is "vessels_df_C.csv" which comes originally from "dictionary.json".
+This folder has a routine "map_obs_vs_mod.py" to create two types of maps:
+
+1) obs minus model scatter plots  with multiple panels.
+2) obs minus model binned plots  with multiple panels
+
+The input file (as of late April 2020) is "vessels_df_C.csv" which comes originally from "dictionary.json".
+More notes need to be available on how this input file was created.
+It has LOTS of different options as documented in the "hardcode" section of the code.
