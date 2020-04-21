@@ -45,14 +45,18 @@ def get_doppio_url(date):
     url='http://tds.marine.rutgers.edu/thredds/dodsC/roms/doppio/2017_da/his/runs/History_RUN_2018-11-12T00:00:00Z'
     return url.replace('2018-11-12',date)
 
+#####
+# HARDOCDES
+date_str = '2020-03-05'#input date to url of models'code to get url
+######
+
 #main
 data = pd.read_csv(emolt_path, index_col=0)#get data from emolt_QCed.csv
 for i in range(len(data)):
-    if not 30<data['lat'][i]<50  or data['flag'][i]==1:#filter the data are not well
+    if not 30<data['lat'][i]<50  or data['flag'][i]~=0:#filter the data are not well
         data = data.drop(i)
 data.index = range(len(data))
 #data = data[0:500]
-date_str = '2020-03-05'#input date to url of models'code to get url
 date_time = datetime.datetime.strptime(date_str+' 00:00:00', '%Y-%m-%d %H:%M:%S')
 url_doppio = get_doppio_url(date_str)
 nc_doppio = netCDF4.Dataset(str(url_doppio))
@@ -77,12 +81,14 @@ y1_d = [lats[0][0], lats[0][-1], lats[-1][-1],\
 plt.plot(x1_d, y1_d, color='b')
 
 #plot grid in figure
-for i in range(0, 242, 22):
+for i in range(0, 242, 22): # need to explain this "242, 22"
     plt.plot([lons[0][i], lons[-1][i]], [lats[0][i], lats[-1][i]], 'b--')
 for i in range(0, 105, 15):
     plt.plot([lons[i][0], lons[i][-1]], [lats[i][0], lats[i][-1]], 'b--')
 
 #loop data and append distribution of number into list
+# at some point, if we get back to this program, we will need to explain how these numbers were obtained
+# what if we someday want to make smaller grid cells?
 for j in range(len(data)):
    for i in range(0,11):
        #list_00 is the box of left bottom,it is 0 row 0 column
